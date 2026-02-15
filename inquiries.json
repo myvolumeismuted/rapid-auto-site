@@ -1,0 +1,29 @@
+[
+    {
+        "firstName": "Kameren",
+        "lastName": "Richardson",
+        "requestId": "LZX4-B54A-B788-2567",
+        "phone": "5405258425",
+        "status": "awaiting_quote",
+        "createedAt": 177885267421,
+        "prefferedDate": "2025-05-18",
+        "email": "kamerenrichardson1@gmail.com",
+        "servieInfo": {
+            "serviceType": "Brake Replacement",
+            "serviceDescription": "Brakes squealing",
+            "serviceLocation": {
+                "street": "2209 Lynnhope DR",
+                "city": "Roanoke",
+                "zipCode": 24017
+            },
+            "vehicle": {
+                "year": 2025,
+                "make": "Toyota",
+                "model": "Camry",
+                "subModel": "LZ",
+                "engine": "2.2L VTEC Naturally Aspirated SOHC",
+                "mileage": 116252
+            }
+        }
+    }
+]
