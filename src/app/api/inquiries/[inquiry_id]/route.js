@@ -1,15 +1,15 @@
 import { NextRequest, NextResponse } from "next/server"
 import { createClient } from "@supabase/supabase-js"
 // import { calculateSince } from "@/lib/calculateSince" // wherever yours is
-function calculateSince(dateString: string) {
+function calculateSince(dateString) {
     const today = new Date(Date.now()).getTime()
     const providedDate = new Date(dateString).getTime()
     return (today - providedDate) / (1000 * 60 * 60 * 24)
 }
 
 export async function GET(
-  request: NextRequest,
-  { params }: any
+  request,
+  { params }
 ) {
     const { inquiry_id } = params
     console.log(inquiry_id)
@@ -19,7 +19,7 @@ export async function GET(
     return NextResponse.json({ success: false, message: "missing authorization" }, { status: 401 })
   }
 
-  const supabase = createClient(process.env.SUPABASE_URL!, process.env.SUPABASE_KEY!)
+  const supabase = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_KEY)
 
   // validate session
   const { data: admin, error: adminErr } = await supabase
