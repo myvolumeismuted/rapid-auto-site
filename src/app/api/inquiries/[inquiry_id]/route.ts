@@ -9,9 +9,9 @@ function calculateSince(dateString: string) {
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { inquiry_id: string } }
+  { params }: any
 ) {
-    const { inquiry_id } = await params
+    const { inquiry_id } = params
     console.log(inquiry_id)
 
   const adminSessionKey = request.cookies.get("admin_session")?.value

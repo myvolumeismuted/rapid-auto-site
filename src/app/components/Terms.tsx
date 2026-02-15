@@ -77,7 +77,7 @@ export function Terms() {
             <div className="toscontainer">
                 <h1 style={{fontSize:"4vw", marginBottom: 40}}>Terms of Service</h1>
                 {Object.keys(TermsAndConditions.termsOfService).map((key) => {
-                    const section = TermsAndConditions.termsOfService[key];
+                    const section = (TermsAndConditions.termsOfService as any)[key];
 
                     return (
                         <div key={key} style={{ marginBottom: "20px" }}>
