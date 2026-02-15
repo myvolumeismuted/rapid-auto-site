@@ -11,6 +11,7 @@ import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
 import { CalendarIcon, CheckCircle2, Search, Loader2, Clock, ShieldCheck, Phone } from "lucide-react";
 import { format } from "date-fns";
 import { toast } from "sonner";
+import "react-day-picker/dist/style.css";
 
 interface FormData {
   // Customer Info
@@ -184,7 +185,7 @@ export function IntakeForm() {
               <div className="p-6 rounded-xl bg-card border border-border">
                 <Phone className="h-8 w-8 text-primary mx-auto mb-3" />
                 <h3 className="mb-2 text-sm text-foreground">Need Help?</h3>
-                <p className="text-sm text-muted-foreground">Call (555) 123-4567</p>
+                <p className="text-sm text-muted-foreground">Call (540) 525-8425</p>
               </div>
             </div>
             <Button
@@ -422,6 +423,7 @@ export function IntakeForm() {
                     <Popover>
                       <PopoverTrigger asChild>
                         <Button
+                          type="button"
                           variant="outline"
                           className="w-full justify-start text-left mt-2 bg-input border-border hover:bg-accent"
                         >
@@ -433,7 +435,7 @@ export function IntakeForm() {
                         <Calendar
                           mode="single"
                           selected={formData.preferredDate}
-                          onSelect={(date) => setFormData({ ...formData, preferredDate: date })}
+                          onSelect={(date:any) => setFormData({ ...formData, preferredDate: date })}
                           initialFocus
                         />
                       </PopoverContent>

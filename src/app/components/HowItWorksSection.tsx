@@ -94,10 +94,10 @@ export function HowItWorksSection() {
               Schedule Service Now
             </a>
             <a
-              href="tel:555-123-4567"
+              href="tel:540-525-8425"
               className="inline-flex items-center justify-center px-8 py-4 rounded-lg border border-border hover:bg-accent text-foreground transition-all duration-300"
             >
-              Or Call: (555) 123-4567
+              Or Call: (540) 525-8425
             </a>
           </div>
         </div>

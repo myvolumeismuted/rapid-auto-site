@@ -1,7 +1,7 @@
 import { NextResponse, NextRequest } from "next/server";
 import { createClient } from "@supabase/supabase-js";
 import { cookies } from "next/headers";
-import bcrypt from "bcrypt"
+import bcrypt from "bcryptjs"
 
 
 async function verify(password: string, hashedPass: string) {
