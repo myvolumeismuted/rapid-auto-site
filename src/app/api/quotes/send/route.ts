@@ -41,7 +41,7 @@ async function main(targetEmail: string, lookup_id: string) {
         subject: "Your recent service request",
         from: '"Kam @ RapidAuto"',
         html: `
-            <p style= "font-size: 15px" >There are new quote options for your service request. Use the link below or click <a href="http://localhost:3000/quote-approval/${lookup_id}">here</a> to continue with your request. </p>
+            <p style= "font-size: 15px" >There are new quote options for your service request. Use the link below or click <a href="https://www.rapidautoworks.com/quote-approval/${lookup_id}">here</a> to continue with your request. </p>
             <a style="width: 100%; height: 10px"; background-color: red; color: white; padding: 5%>View Quote Options</a>
         `
     }).catch(error => {

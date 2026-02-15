@@ -53,7 +53,7 @@ async function sendEmailToOwner(id: string): Promise<{ success: boolean }> {
         from: `"Kam @ RapidAuto"`,
         to: ["kamerenrichardson1@gmail.com", "kam@rapidautoworks.com"],
         subject: "Your Recent Service Request",
-        html: `Theres been a new service request. Login to the dashboard and approve now. Request ID: ${id}. View Here: http://localhost:3000/admin/edit/${id}"`,
+        html: `Theres been a new service request. Login to the dashboard and approve now. Request ID: ${id}. View Here: https://www.rapidautoworks.com/admin/edit/${id}"`,
       });
   
       return { success: true };
