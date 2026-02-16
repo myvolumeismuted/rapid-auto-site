@@ -57,7 +57,7 @@ export default function QuotePage() {
                 "Content-Type": "application/json"
             },
             method: "POST",
-            body: JSON.stringify({lookup_id: params.inquiry_id, option: selectedOption})
+            body: JSON.stringify({lookup_id: params.inquiry_id, option: selectedOption, itemization: selectedOption.itemization})
         })
         const { success } = await response.json()
         if (success) setQuoteHasSent(true)

@@ -47,11 +47,13 @@ async function createAndSendInvoice(items: [{name: string, price: number}], cust
 }
 
 export async function POST(request: NextRequest) {
-    const { option, lookup_id } = await request.json().catch(error => { return {} })
-    console.log(option, lookup_id)
+    const { option, lookup_id, itemization } = await request.json().catch(error => { return {} })
+    console.log(itemization, "THIS IS THE ITEMIZATION")
     const supabase = await createClient(process.env.SUPABASE_URL!, process.env.SUPABASE_KEY!)
     const { data, error } = await supabase.from("inquiries").update({ selected_option: JSON.stringify(option) }).eq("lookup_id", lookup_id).select("*").single()
-    if (error) return NextResponse.json({ success: false, error: error.message })
+    const { data: itemizeData, error: itemizeError } = await supabase.from("inquiries").update({ itemization: JSON.stringify(itemization) }).eq("lookup_id", lookup_id).select("*").single()
+    console.log(itemizeError)
+    if (error || itemizeError) return NextResponse.json({ success: false, error: error })
     await transporter.sendMail({
         to: data.email,
         from: "'Kam @ RapidAuto'",
@@ -65,8 +67,8 @@ export async function POST(request: NextRequest) {
         text: `Request #${lookup_id} has now chosen a quote option. Please review and follow-up with the customer to begin servicing`
     })
     
-    if (data.itemization) {
-        await createAndSendInvoice(JSON.parse(data.itemization), {email: data.email, name: `${data.firstName} ${data.lastName}`, phone: data.phone || null})
+    if (itemizeData.itemization) {
+        await createAndSendInvoice(JSON.parse(itemizeData.itemization), {email: data.email, name: `${data.firstName} ${data.lastName}`, phone: data.phone || null})
     }
 
     return NextResponse.json({success: true})

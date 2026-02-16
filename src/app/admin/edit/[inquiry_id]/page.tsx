@@ -8,7 +8,8 @@ type QuoteOption = {
   label: string // Good / Better / Best
   title: string // Full Synthetic / Conventional / High Mileage etc
   price: string // keep as string for input; parse when needed
-  notes: string
+  notes: string,
+  itemization: [{name: string, price: number}] | []
 }
 
 function uid() {
@@ -27,9 +28,9 @@ export default function InquiryPage() {
   // Quote modal state
   const [quoteOpen, setQuoteOpen] = useState(false)
   const [options, setOptions] = useState<QuoteOption[]>([
-    { id: uid(), label: "Good", title: "Conventional Oil", price: "", notes: "" },
-    { id: uid(), label: "Better", title: "High Mileage Oil", price: "", notes: "" },
-    { id: uid(), label: "Best", title: "Full Synthetic Oil", price: "", notes: "" },
+    { id: uid(), label: "Good", title: "Conventional Oil", price: "", notes: "", itemization: [] },
+    { id: uid(), label: "Better", title: "High Mileage Oil", price: "", notes: "", itemization: [] },
+    { id: uid(), label: "Best", title: "Full Synthetic Oil", price: "", notes: "", itemization: [] },
   ])
 
   const selectedTotal = useMemo(() => {
@@ -71,7 +72,7 @@ export default function InquiryPage() {
   function addOption() {
     setOptions((prev) => [
       ...prev,
-      { id: uid(), label: `Option ${prev.length + 1}`, title: "", price: "", notes: "" },
+      { id: uid(), label: `Option ${prev.length + 1}`, title: "", price: "", notes: "", itemization: [] },
     ])
   }
 
@@ -138,6 +139,34 @@ export default function InquiryPage() {
     return `${months[day.getMonth()]} ${day.getDate()}, ${day.getFullYear()} ${dayTime.toUpperCase()}`
   }
 
+
+  // Tracking item inputs
+  const [itemName, setItemName] = useState("")
+  const [itemPrice, setItemPrice] = useState("")
+  const [containerDisplay, setContainerDisplay] = useState("none")
+  const [selectedId, setSelectedId] = useState("")
+
+  function handleOpenDisplay(id: string) {
+    setContainerDisplay("flex")
+    setSelectedId(id)
+  }
+
+  function handleCloseDisplay() {
+    setContainerDisplay("none")
+    setItemName("")
+    setItemPrice("")
+  }
+
+  function handleAddItem(id: string) {
+    const oldOpts = options
+    const index = options.findIndex(item => item.id === id)
+    if (index >= 0) oldOpts[index].itemization.push({ name: itemName, price: itemPrice })
+    setOptions(oldOpts)
+    handleCloseDisplay()
+    console.log(options)
+  }
+
+
   
 
   return (
@@ -150,8 +179,21 @@ export default function InquiryPage() {
 
       {!loading && !error && (
         <main>
+
+          <div style={{display: containerDisplay}} className="itemizeBackdrop">
+            <div className="itemizeContainer">
+              <label htmlFor="itemizeName">Item Name:</label>
+              <input value={itemName} onChange={(e) => setItemName(e.target.value)} type="text" name="itemizeName" id="" placeholder="Full Syn. Oil Change" />
+              <label htmlFor="itemizePrice">Item Price:</label>
+              <input value={itemPrice} onChange={(e) => setItemPrice(e.target.value)} type="number" name="itemizePrice" id="" placeholder="75.99" />
+              <button onClick={() => handleAddItem(selectedId)}>Add Item</button>
+              <button onClick={handleCloseDisplay}>Cancel</button>
+            </div>
+          </div>
+
           <div className="custView">
             <div className="customerContent">
+
 
               {/* CARD HEADER */}
               <div className="card-header">
@@ -270,6 +312,19 @@ export default function InquiryPage() {
                         placeholder="What’s included? Oil qty, filter, labor, warranty, etc."
                         rows={3}
                       />
+                    </div>
+
+                    <div className="optionRow">
+                      {
+                        opt.itemization.map((item, index) => (
+                          <div className="itemOption">
+                            <span>${item.price}</span>
+                          </div>
+                        ))
+                      }
+                      <div onClick={() => handleOpenDisplay(opt.id)} className="addItemizeBtn">
+                      <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" className="css-i6dzq1"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                      </div>
                     </div>
 
                     <div className="optionFooter">

@@ -9,9 +9,9 @@ function calculateSince(dateString: string) {
 
 export async function GET(
   request: NextRequest,
-  { params }: any
+  { params }: {params: {inquiry_id: string}}
 ) {
-    const { inquiry_id } = params
+    const { inquiry_id } = await params
     console.log(inquiry_id)
 
   const adminSessionKey = request.cookies.get("admin_session")?.value
@@ -19,7 +19,7 @@ export async function GET(
     return NextResponse.json({ success: false, message: "missing authorization" }, { status: 401 })
   }
 
-  const supabase = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_KEY)
+  const supabase = createClient(process.env.SUPABASE_URL!, process.env.SUPABASE_KEY!)
 
   // validate session
   const { data: admin, error: adminErr } = await supabase
@@ -54,6 +54,8 @@ export async function GET(
     .single()
 
   if (inquiryErr || !inquiry) {
+    console.log(inquiryErr, "inquiry error")
+    console.log(inquiry, "inquiry does not exist")
     return NextResponse.json({ success: false, message: "no records found" }, { status: 404 })
   }
 
