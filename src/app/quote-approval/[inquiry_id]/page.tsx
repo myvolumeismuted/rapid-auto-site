@@ -4,18 +4,27 @@
 import { useState, useEffect } from "react";
 import { useParams } from "next/navigation";
 
+type QuoteItem = {
+    name: string
+    price: number | string
+}
+
+type QuoteOption = {
+    id: string | null
+    title?: string
+    price?: string | number
+    notes?: string
+    itemization?: QuoteItem[]
+}
 
 export default function QuotePage() {
-    type selectedOPtion = {
-        id: string
-    }
     const params = useParams()
     console.log(params.inquiry_id)
     const [loading, setLoading] = useState(true)
     const [error, setError] = useState(false)
     const [data, setData] = useState({})
-    const [quoteOptions, setQuoteOptions] = useState([])
-    const [selectedOption, setSelectedOPtion] = useState({id: null})
+    const [quoteOptions, setQuoteOptions] = useState<QuoteOption[]>([])
+    const [selectedOption, setSelectedOPtion] = useState<QuoteOption | null>(null)
     const [quoteHasSent, setQuoteHasSent] = useState(false)
 
     const preferredPaymentMethods = [
@@ -39,11 +48,13 @@ export default function QuotePage() {
         } else {
             setData(data)
             if (data.selected_option) setQuoteHasSent(true)
-            setQuoteOptions(JSON.parse(data.quote_options))
+            setQuoteOptions(JSON.parse(data.quote_options || "[]"))
             setLoading(false)
             console.log(data)
         }
     }
+
+    const [awaitingResponse, setAwaitingResponse] = useState(false)
 
     useEffect(() => {
         // MAKE REQUEST TO SERVER, GATHER INFO TO DISPLAY
@@ -51,16 +62,23 @@ export default function QuotePage() {
     }, [])
 
     async function sendQuoteConfirmation() {
+        if (!selectedOption?.id) return
         console.log(selectedOption)
+        setAwaitingResponse(true)
         const response = await fetch("/api/quote-selection/approve", {
             headers: {
                 "Content-Type": "application/json"
             },
             method: "POST",
-            body: JSON.stringify({lookup_id: params.inquiry_id, option: selectedOption, itemization: selectedOption.itemization})
+            body: JSON.stringify({
+                lookup_id: params.inquiry_id,
+                option: selectedOption,
+                itemization: selectedOption.itemization || []
+            })
         })
         const { success } = await response.json()
         if (success) setQuoteHasSent(true)
+        setAwaitingResponse(false)
     }
 
     return (
@@ -83,11 +101,10 @@ export default function QuotePage() {
 
                 {!loading && quoteOptions.length > 0 && !quoteHasSent && (
                     <>
-                        {quoteOptions.map((item: any, index) => (
-                            <>
-                                <div style={item.id === selectedOption.id ? { border: "1px solid rgb(0, 191, 255)" } : {}} key={index} className="quoteCard">
+                        {quoteOptions.map((item, index) => (
+                                <div style={item.id === selectedOption?.id ? { border: "1px solid rgb(0, 191, 255)" } : {}} key={index} className="quoteCard">
                                     <span className="quoteTitle">{item.title!}</span>
-                                    <span className="quotePrice">${parseFloat(item.price).toFixed(2)}</span>
+                                    <span className="quotePrice">${Number(item.price || 0).toFixed(2)}</span>
                                     <span className="quoteDesc">{item.notes}</span>
 
                                     <div className="guarwrap">
@@ -110,13 +127,12 @@ export default function QuotePage() {
 
                                     <button onClick={() => setSelectedOPtion(item)} className="quoteBtn">Select Quote</button>
                                 </div>
-                            </>
 
                         ))}
 
 
                         <span style={{fontWeight: "500", width: "100%", textAlign: "center", marginTop: "10px"}}>Any questions? <a style={{textDecoration: "underline"}} href="mailto:kam@rapidautoworks.com">Contact Us</a></span>
-                        <button onClick={sendQuoteConfirmation} className="confBtn" style={Object.keys(selectedOption).length > 0 ? { display: "flex" } : { display: "none" }}>Confirm Quote Selection</button>
+                        <button disabled={awaitingResponse || !selectedOption?.id} onClick={sendQuoteConfirmation} className="confBtn" style={selectedOption?.id ? { display: "flex" } : { display: "none" }}>Confirm Quote Selection</button>
 
                     </>
                 )
@@ -125,5 +141,3 @@ export default function QuotePage() {
         </main>
     )
 }
-
-

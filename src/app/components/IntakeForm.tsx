@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Input } from "./ui/input";
 import { Label } from "./ui/label";
 import { Textarea } from "./ui/textarea";
@@ -12,6 +12,7 @@ import { CalendarIcon, CheckCircle2, Search, Loader2, Clock, ShieldCheck, Phone 
 import { format } from "date-fns";
 import { toast } from "sonner";
 import "react-day-picker/dist/style.css";
+import AppointmentTimePicker from "./AppointmentTimePicker";
 
 interface FormData {
   // Customer Info
@@ -26,6 +27,8 @@ interface FormData {
   vehicleMake: string;
   vehicleModel: string;
   mileage: string;
+  vin: string;
+  displacement: string
 
   // Service Info
   serviceType: string;
@@ -43,7 +46,15 @@ interface VehicleData {
   year: string;
   make: string;
   model: string;
+  displacement: string
 }
+
+export const viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 1,
+  userScalable: false,
+};
 
 export function IntakeForm() {
   const [submitted, setSubmitted] = useState(false);
@@ -57,6 +68,7 @@ export function IntakeForm() {
     vehicleYear: "",
     vehicleMake: "",
     vehicleModel: "",
+    vin: "",
     mileage: "",
     serviceType: "",
     issueDescription: "",
@@ -65,28 +77,39 @@ export function IntakeForm() {
     address: "",
     city: "",
     zipCode: "",
+    displacement: ""
   });
 
   const handleLicensePlateLookup = async () => {
-    setLookingUp(true)
-    toast.error("Unable to access vehicle info at this time. Please enter details manually.")
-    setLookingUp(false)
-    return;
-    if (!formData.licensePlate) {
-      toast.error("Please enter a license plate number");
-      return;
-    }
+    // setLookingUp(true)
+    // toast.error("Unable to access vehicle info at this time. Please enter details manually.")
+    // setLookingUp(false)
+    // return;
 
     setLookingUp(true);
 
+    if (canPlateLookup) {
+      if (!formData.vin) {
+        toast.error("Please enter a VIN number")
+        return
+      }
+    } else {
+      if (!formData.vin) {
+        toast.error("Please enter a VIN number")
+        return
+      }
+    }
+
+
     const getVehicleInfo = async () => {
       const licensePlate = formData.licensePlate
-      const response = await fetch("/lookup-plate", {
+      const vin = formData.vin
+      const response = await fetch("/api/lookup-plate", {
         method: "POST",
         headers: {
           "Content-Type": "application/json"
         },
-        body: JSON.stringify({ licensePlate })
+        body: JSON.stringify({ vin, licensePlate })
       }).then(async i => {
         return await i.json()
       })
@@ -100,12 +123,15 @@ export function IntakeForm() {
           vehicleYear: response.year,
           vehicleMake: response.make,
           vehicleModel: response.model,
+          displacement: response.displacement || ""
         });
         toast.success("Vehicle information retrieved!");
         setLookingUp(false);
       }
 
     }
+
+    await getVehicleInfo()
 
     const states = [
       "AL", "AK", "AZ", "AR", "CA", "CO", "CT", "DE", "FL", "GA",
@@ -137,6 +163,11 @@ export function IntakeForm() {
       return;
     }
 
+    if (!formData.preferredDate || !formData.preferredTime || formData.preferredTime === "CLOSED") {
+      toast.error("Please select a valid time frame")
+      return
+    }
+
 
     //! ADD SUMBMIT FORM FUNCTION 
     try {
@@ -155,9 +186,51 @@ export function IntakeForm() {
     }
   };
 
+  const [cameFromRocco, setCameFromRocco] = useState(null)
+
+  useEffect(() => {
+    const roccoValue = localStorage.getItem("frm-rcc")
+    if (roccoValue) {
+      setCameFromRocco(true as any)
+      localStorage.removeItem("frm-rcc")
+    }
+  }, [])
+
+
+  const [canPlateLookup, setCanPlateLookup] = useState(false)
+  const [VINPopoverDisplay, setVINPopoverDisplay] = useState("none")
+  const [vinClass, setVinClass] = useState(true)
+
+  const animateOpenDisplay = () => {
+    setVINPopoverDisplay("flex")
+    setTimeout(() => {
+      setVinClass(true)
+    }, 0.3 * 1000);
+  }
+
+  const animateCloseDisplay = () => {
+    setVinClass(false)
+    setTimeout(() => {
+      setVINPopoverDisplay("none")
+    }, 0.3 * 1000)
+  }
+
+  const handleVinClick = () => {
+    if (vinClass) {
+      animateCloseDisplay()
+    } else {
+      animateOpenDisplay()
+    }
+  }
+
+  function updateTime(time: string) {
+    setFormData({...formData, preferredTime: time})
+  }
+
   if (submitted) {
     return (
       <section id="intake-form" className="py-24 bg-gradient-to-b from-[#0d1220] to-background relative overflow-hidden">
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
         <div className="absolute inset-0">
           <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-primary/10 rounded-full blur-3xl"></div>
         </div>
@@ -169,7 +242,9 @@ export function IntakeForm() {
             </div>
             <h2 className="text-4xl md:text-5xl mb-4 text-foreground">Request Received!</h2>
             <p className="text-xl text-muted-foreground mb-8">
-              Thank you for choosing RapidAuto Mobile Mechanic. We'll review your service request and contact you shortly to confirm your appointment.
+              {
+                cameFromRocco ? "Thank you for choosing RapidAuto Mobile Mechanic. Rocco is proud of you! We'll review your service request and contact you shortly to confirm your appointment." : "Thank you for choosing RapidAuto Mobile Mechanic. We'll review your service request and contact you shortly to confirm your appointment."
+              }
             </p>
             <div className="grid md:grid-cols-3 gap-6 mb-8">
               <div className="p-6 rounded-xl bg-card border border-border">
@@ -289,13 +364,13 @@ export function IntakeForm() {
 
               {/* License Plate Lookup */}
               <div className="mb-6 p-6 rounded-xl bg-primary/5 border border-primary/20">
-                <Label htmlFor="licensePlate">License Plate (Optional Auto-Fill)</Label>
+                <Label htmlFor="licensePlate">{ canPlateLookup ? "License Plate (Optional Auto-Fill)" : "Vin Number (Optional Auto-Fill)" }</Label>
                 <div className="flex gap-2 mt-2">
                   <Input
                     id="licensePlate"
-                    value={formData.licensePlate}
-                    onChange={(e: any) => setFormData({ ...formData, licensePlate: e.target.value.toUpperCase() })}
-                    placeholder="ABC1234"
+                    value={canPlateLookup ? formData.licensePlate : formData.vin}
+                    onChange={(e: any) => canPlateLookup ? setFormData({ ...formData, licensePlate: e.target.value.toUpperCase() }) : setFormData({...formData, vin: e.target.value.toUpperCase()})}
+                    placeholder={canPlateLookup ? "ABC1234" : "1HGCM82633A123456"}
                     className="bg-background/50 border-border focus:border-primary"
                   />
 
@@ -320,8 +395,13 @@ export function IntakeForm() {
                   </Button>
                 </div>
                 <p className="text-xs text-muted-foreground mt-2">
-                  Enter your license plate to auto-fill vehicle details
+                  {canPlateLookup ? "Enter your license plate to auto-fill vehicle details" : "Enter your VIN number to auto-fill vehicle details"}
                 </p>
+                {!canPlateLookup && (
+                  <div style={{textDecoration: "underline"}} onMouseEnter={animateOpenDisplay} onMouseLeave={animateCloseDisplay} onClick={handleVinClick} className="text-xs text-muted-foreground mt-2">where do I find my VIN?
+                    <div style={{display: VINPopoverDisplay}} className={`findVinPopOver ${vinClass ? "open" : ""}`}>You can find your vehicle's VIN by looking through your vehicle insurance app settings, any recent service receipt, or simply looking into your vehicle's door jamb. Can't find it? Feel free to skip this part and we will find it later.</div>
+                  </div>
+                )}
               </div>
 
               <div className="grid md:grid-cols-3 gap-4">
@@ -444,7 +524,13 @@ export function IntakeForm() {
 
                   <div>
                     <Label htmlFor="preferredTime">Preferred Time</Label>
-                    <Select
+                    <AppointmentTimePicker
+                      style={{ width: "100%" }}
+                      trackValueUpdate={updateTime}
+                      trackValue={formData.preferredTime}
+                      selectedDate={formData.preferredDate}
+                    ></AppointmentTimePicker>
+                    {/* <Select
                       value={formData.preferredTime}
                       onValueChange={(value) => setFormData({ ...formData, preferredTime: value })}
                     >
@@ -456,7 +542,7 @@ export function IntakeForm() {
                         <SelectItem value="afternoon">Afternoon (12pm-4pm)</SelectItem>
                         <SelectItem value="evening">Evening (4pm-7pm)</SelectItem>
                       </SelectContent>
-                    </Select>
+                    </Select> */}
                   </div>
                 </div>
               </div>

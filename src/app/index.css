@@ -4305,3 +4305,613 @@ span svg {
   align-items: center;
   justify-content: center;
 }
+
+
+.assasasasa {
+  background-color: #0f1320;
+}
+
+
+.availabilityContainer {
+  display: flex;
+  flex-direction: column;
+  width: 100dvw;
+  min-height: 100dvh;
+  align-items: center;
+}
+
+
+.dateRow {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 20px;
+  padding: 2%;
+  align-items: center;
+  justify-content: center;
+}
+
+.dateSquare {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  width: 100px;
+}
+
+.dateDisplay {
+  width: 100%;
+  aspect-ratio: 1/1.5;
+  background-color: #1a1f2e;
+  border-radius: 10px;
+  box-shadow: 10px 10px 0px 0px solid black;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  color: white;
+  align-items: center;
+  justify-content: center;
+}
+
+.timeSelector {
+  width: 100%;
+  height: 35px;
+  background-color: #1a1f2e;
+  color: white;
+}
+
+
+.puppyScreen {
+  min-height: 100dvh;
+  padding: clamp(1rem, 2.5vw, 2rem);
+  background: radial-gradient(circle at top, #1f2a44 0%, #111827 45%, #0b1120 100%);
+}
+
+.puppyScreenContainer {
+  width: min(100%, 72rem);
+  margin: 0 auto;
+  display: grid;
+  gap: clamp(1rem, 2.4vw, 1.75rem);
+}
+
+.headerLine {
+  text-align: center;
+  background: #151d30;
+  border: 1px solid #24314d;
+  border-radius: 1.25rem;
+  padding: clamp(1rem, 2.4vw, 1.5rem);
+  box-shadow: 0 20px 30px -22px rgba(0, 0, 0, 0.75);
+}
+
+.headerLine h1 {
+  font-size: clamp(1.8rem, 5vw, 3.25rem);
+  font-weight: 800;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  color: #f3f7ff;
+}
+
+.octxt {
+  color: #ff7b47;
+  margin-left: 0.2em;
+  white-space: nowrap;
+}
+
+.puppySubhead {
+  margin-top: 0.5rem;
+  font-size: clamp(1.05rem, 2.5vw, 1.55rem);
+  font-weight: 600;
+  color: #b8c5e0;
+}
+
+.puppyImage {
+  width: min(100%, 56rem);
+  margin: 0 auto;
+  aspect-ratio: 16 / 10;
+  border: 0.75rem solid #1b2438;
+  border-radius: 1.25rem;
+  overflow: hidden;
+  background: #0f172a;
+  box-shadow: 0 30px 40px -28px rgba(0, 0, 0, 0.8);
+}
+
+.puppyImage img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.puppyCard {
+  width: min(100%, 34rem);
+  margin: 0 auto;
+  border-radius: 1rem;
+  overflow: hidden;
+  background: rgba(15, 23, 42, 0.92);
+  border: 1px solid #27324a;
+  box-shadow: 0 22px 34px -26px rgba(0, 0, 0, 0.78);
+}
+
+.puppyCard p {
+  padding: 0.9rem 1rem;
+  text-align: center;
+  border-bottom: 1px solid #27324a;
+  color: #dbe5ff;
+  font-size: clamp(1rem, 2.3vw, 1.1rem);
+  line-height: 1.45;
+}
+
+.puppyCard p span {
+  color: #ffffff;
+  font-weight: 800;
+}
+
+.puppyCard button {
+  width: 100%;
+  padding: 1rem;
+  background: linear-gradient(135deg, #ff8a5c 0%, #ff5f2e 100%);
+  color: #ffffff;
+  cursor: pointer;
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.puppyCard button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 12px 18px -12px rgba(255, 95, 46, 0.75);
+}
+
+.puppyCard button:focus-visible {
+  outline: 3px solid #ffb89b;
+  outline-offset: -3px;
+}
+
+@media (min-width: 900px) {
+  .puppyScreenContainer {
+    grid-template-columns: 1.2fr 0.8fr;
+    grid-template-areas:
+      "header header"
+      "image card";
+    align-items: center;
+  }
+
+  .headerLine {
+    grid-area: header;
+  }
+
+  .puppyImage {
+    grid-area: image;
+    width: 100%;
+  }
+
+  .puppyCard {
+    grid-area: card;
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .puppyScreen {
+    padding: 0.75rem;
+  }
+
+  .headerLine {
+    border-radius: 1rem;
+  }
+
+  .puppyImage {
+    border-width: 0.5rem;
+    border-radius: 1rem;
+  }
+}
+
+
+.findVinPopOver {
+  display: flex;
+  padding: 2%;
+  background-color:#0f172a;
+  max-width: 300px;
+  position: absolute;
+  transform: translateY(10px);
+  border-radius: 10px;
+  border: 1px solid #DDDDDD3A;
+  padding-top: 1%;
+  padding-bottom: 1%;
+  transition: all 0.3s ease-out;
+  opacity: 0;
+}
+
+.findVinPopOver.open {
+  opacity: 1;
+}
+
+.appointmentTimePicker {
+  width: 300px;
+  background-color: rgba(255, 255, 255, 0.05);
+  height: 35px;
+  border-radius: 8px;
+  box-sizing: border-box;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  display: flex;
+  position: relative;
+  flex-direction: row;
+  padding-right: 1%;
+  margin-top: 8px;
+  border: 1px solid #DDDDDD3A;
+  font-size: 1rem;
+}
+
+.appointmentTimePicker input {
+  display: flex;
+  flex: 1;
+  width: 100%;
+  padding-left: 5%;
+  padding-right: 5%;
+  font-size: 0.9rem;
+}
+
+.timeSelectorContainer {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-height: 300px;
+  background-color: rgb(10, 14, 26);
+  border: 1px solid #DDDDDD3A;
+  border-radius: 10px;
+  position: absolute;
+  flex-shrink: 0;
+  overflow-y: auto;
+  top: calc(100% + 20px);
+  left: 0
+}
+
+.clockIcon {
+  height: 100%;
+  aspect-ratio: 1/1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.clockIcon svg {
+  scale: 0.7;
+}
+
+.timeItem {
+  width: 100%;
+  height: 50px;
+  border-bottom: 1px solid #DDDDDD3A;
+  display: flex;
+  flex: 0 0 50px;
+  background-color: rgba(255, 255, 255, 0.05);
+  cursor: pointer;
+  align-items: center;
+  padding-left: 5%;
+  padding-right: 5%;
+  transition: all 0.3s ease;
+  justify-content: space-between;
+}
+
+.timeItem:hover{
+  background-color: rgba(255, 255, 255, 0.261);
+}
+
+.timeItem svg {
+  height: 100%;
+  aspect-ratio: 1/1;
+  color: orange;
+  scale: 1;
+}
+
+
+ .availabilityContainer button {
+  width: 300px;
+  height: 50px;
+  background-color: #ff6b35;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+
+.viewAppointmentContainer {
+  width: 100dvw;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100dvh;
+}
+
+.trackScreenContainer {
+  width: 100%;
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  padding: 5rem clamp(1rem, 3vw, 2.25rem) 3rem;
+  background:
+    radial-gradient(circle at 0% 0%, rgba(255, 109, 58, 0.2), transparent 36%),
+    radial-gradient(circle at 100% 0%, rgba(9, 166, 255, 0.14), transparent 34%),
+    linear-gradient(180deg, #0f1118 0%, #11152a 100%);
+  color: #f8fafc;
+}
+
+.trackHeader {
+  width: min(980px, 100%);
+  margin: 0 auto 1.8rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+}
+
+.trackEyebrow {
+  width: fit-content;
+  font-size: 0.76rem;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: #9fd9ff;
+  font-weight: 700;
+}
+
+.trackHeader h1 {
+  font-size: clamp(1.55rem, 2.8vw, 2.5rem);
+  line-height: 1.15;
+  font-weight: 700;
+}
+
+.trackHeader span {
+  max-width: 62ch;
+  color: rgba(226, 232, 240, 0.92);
+  font-size: 0.98rem;
+  line-height: 1.55;
+}
+
+.searchContainer {
+  width: min(980px, 100%);
+  margin: 0 auto;
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1rem;
+  border-radius: 0.85rem;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  background: rgba(10, 15, 30, 0.6);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+.searchContainer button {
+  min-height: 3rem;
+  min-width: 11rem;
+  padding: 0 1rem;
+  background: linear-gradient(135deg, #ff6d3a 0%, #ff9258 100%);
+  border-radius: 0.65rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: #ffffff;
+  font-weight: 700;
+  font-size: 0.93rem;
+  letter-spacing: 0.01em;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease;
+}
+
+.searchContainer button:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: 0 10px 20px rgba(255, 109, 58, 0.35);
+}
+
+.searchContainer button:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+}
+
+#appt-search {
+  flex: 1;
+  min-height: 3rem;
+  padding: 0 0.9rem;
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  border-radius: 0.62rem;
+  background-color: rgba(255, 255, 255, 0.05);
+  color: #f8fafc;
+  font-size: 0.95rem;
+}
+
+#appt-search::placeholder {
+  color: rgba(226, 232, 240, 0.68);
+}
+
+#appt-search:focus {
+  outline: none;
+  border-color: rgba(255, 146, 88, 0.9);
+  box-shadow: 0 0 0 3px rgba(255, 146, 88, 0.18);
+}
+
+.infoDisplay {
+  width: min(980px, 100%);
+  margin: 1.05rem auto 0;
+  flex: 1;
+  display: flex;
+  align-items: stretch;
+}
+
+.innerInfoContainer {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  border-radius: 1rem;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  background: rgba(8, 12, 24, 0.72);
+  padding: clamp(1rem, 2.2vw, 1.45rem);
+  box-shadow: 0 24px 46px rgba(2, 7, 23, 0.4);
+}
+
+.innerInfoContainer.hasResult {
+  align-items: flex-start;
+}
+
+.trackStateContainer {
+  min-height: 270px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 0.8rem;
+  text-align: center;
+  padding: 1rem;
+}
+
+.trackStateContainer h2 {
+  font-size: 1.3rem;
+  line-height: 1.2;
+  font-weight: 650;
+}
+
+.trackStateContainer p {
+  max-width: 52ch;
+  color: rgba(226, 232, 240, 0.85);
+  line-height: 1.52;
+}
+
+.trackStateContainer button {
+  margin-top: 0.4rem;
+  padding: 0.68rem 1rem;
+  border-radius: 0.55rem;
+  background: #ff7b47;
+  color: #fff;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.trackResultContent {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 0.95rem;
+}
+
+.trackResultHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.9rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.14);
+  padding-bottom: 0.82rem;
+}
+
+.trackResultHeader h2 {
+  font-size: clamp(1.18rem, 2vw, 1.6rem);
+  font-weight: 700;
+}
+
+.trackMeta {
+  margin-bottom: 0.25rem;
+  font-size: 0.84rem;
+  color: rgba(226, 232, 240, 0.72);
+}
+
+.trackStatusChip {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  padding: 0.4rem 0.72rem;
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: #0b3d1f;
+  background-color: #8ef9ba;
+}
+
+.trackCardsGrid {
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.82rem;
+}
+
+.trackInfoCard,
+.trackIssueCard {
+  border: 1px solid rgba(255, 255, 255, 0.13);
+  border-radius: 0.85rem;
+  background: rgba(255, 255, 255, 0.03);
+  padding: 0.92rem 0.95rem;
+}
+
+.trackInfoCard h3,
+.trackIssueCard h3 {
+  font-size: 0.98rem;
+  font-weight: 650;
+  margin-bottom: 0.75rem;
+  letter-spacing: 0.01em;
+}
+
+.trackDetailRow {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  border-bottom: 1px dashed rgba(255, 255, 255, 0.14);
+  padding-bottom: 0.62rem;
+  margin-bottom: 0.62rem;
+}
+
+.trackDetailRow:last-child {
+  margin-bottom: 0;
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.trackDetailRow span {
+  font-size: 0.76rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: rgba(226, 232, 240, 0.7);
+}
+
+.trackDetailRow strong {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #f8fafc;
+  word-break: break-word;
+}
+
+.trackIssueCard p {
+  color: rgba(226, 232, 240, 0.95);
+  line-height: 1.6;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+@media screen and (max-width: 980px) {
+  .trackCardsGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media screen and (max-width: 760px) {
+  .trackScreenContainer {
+    padding-top: 4.25rem;
+  }
+
+  .searchContainer {
+    flex-wrap: wrap;
+    padding: 0.75rem;
+  }
+
+  .searchContainer button {
+    width: 100%;
+  }
+
+  .trackResultHeader {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .trackCardsGrid {
+    grid-template-columns: 1fr;
+  }
+}

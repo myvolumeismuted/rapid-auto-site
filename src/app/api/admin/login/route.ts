@@ -2,11 +2,14 @@ import { NextResponse, NextRequest } from "next/server";
 import { createClient } from "@supabase/supabase-js";
 import { cookies } from "next/headers";
 import bcrypt from "bcryptjs"
+import { LicensePlateLookup } from "@/LicensePlateLookup/LicenseVerify";
 
 
 async function verify(password: string, hashedPass: string) {
     return await bcrypt.compare(password, hashedPass)
 }
+
+
 
 function createSession() {
     let session = "XXXX-XXXX-XXXX-XXXX-XXXX"

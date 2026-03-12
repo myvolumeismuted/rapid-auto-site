@@ -9,7 +9,7 @@ type QuoteOption = {
   title: string // Full Synthetic / Conventional / High Mileage etc
   price: string // keep as string for input; parse when needed
   notes: string,
-  itemization: [{name: string, price: number}] | []
+  itemization: {name: string, price: number}[]
 }
 
 function uid() {
@@ -158,12 +158,18 @@ export default function InquiryPage() {
   }
 
   function handleAddItem(id: string) {
-    const oldOpts = options
-    const index = options.findIndex(item => item.id === id)
-    if (index >= 0) oldOpts[index].itemization.push({ name: itemName, price: itemPrice })
-    setOptions(oldOpts)
+    const normalizedName = itemName.trim()
+    const normalizedPrice = Number(itemPrice)
+    if (!normalizedName || !Number.isFinite(normalizedPrice) || normalizedPrice <= 0) return
+
+    setOptions((prev) => prev.map((option) => {
+      if (option.id !== id) return option
+      return {
+        ...option,
+        itemization: [...option.itemization, { name: normalizedName, price: normalizedPrice }]
+      }
+    }))
     handleCloseDisplay()
-    console.log(options)
   }
 
 
@@ -317,7 +323,7 @@ export default function InquiryPage() {
                     <div className="optionRow">
                       {
                         opt.itemization.map((item, index) => (
-                          <div className="itemOption">
+                          <div key={`${opt.id}-${index}`} className="itemOption">
                             <span>${item.price}</span>
                           </div>
                         ))
