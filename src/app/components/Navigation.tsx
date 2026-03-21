@@ -79,9 +79,9 @@ export function Navigation() {
               asChild
               className="border-border hover:bg-accent"
             >
-              <a href="tel:540-525-8425" className="flex items-center gap-2">
+              <a href="tel:540-254-0670" className="flex items-center gap-2">
                 <Phone className="h-4 w-4" />
-                (540) 525-8425
+                (540) 254-0670
               </a>
             </Button>
           </div>
@@ -132,9 +132,9 @@ export function Navigation() {
                 asChild
                 className="border-border hover:bg-accent w-full"
               >
-                <a href="tel:540-525-8425" className="flex items-center justify-center gap-2">
+                <a href="tel:540-254-0670" className="flex items-center justify-center gap-2">
                   <Phone className="h-4 w-4" />
-                  (540) 525-8425
+                  (540) 254-0670
                 </a>
               </Button>
             </div>

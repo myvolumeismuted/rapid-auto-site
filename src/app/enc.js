@@ -1,9 +1,8 @@
-const bcrypt = require("bcrypt")
-
-async function hash() {
-    const hashedpass = await bcrypt.hash("Kameren1!", 12)
-    console.log(hashedpass)
+const testObject = {
+    orange: "graan",
+    2: "blue",
+    3: "Four"
 }
 
-
-hash()
+const {orange, ...newSa} = testObject
+console.log(newSa)

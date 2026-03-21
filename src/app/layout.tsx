@@ -100,7 +100,7 @@ export default function RootLayout({
         name: businessName,
         url: siteUrl,
         email: "kam@rapidautoworks.com",
-        telephone: "+1-540-525-8425",
+        telephone: "+1-540-254-0670",
         sameAs: [],
       },
       {
@@ -116,7 +116,7 @@ export default function RootLayout({
         "@id": `${siteUrl}#autorepair`,
         name: businessName,
         url: siteUrl,
-        telephone: "+1-540-525-8425",
+        telephone: "+1-540-254-0670",
         email: "kam@rapidautoworks.com",
         priceRange: "$$",
         areaServed: "United States",

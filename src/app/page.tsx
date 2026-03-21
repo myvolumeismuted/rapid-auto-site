@@ -36,14 +36,14 @@ export default function Home() {
     provider: {
       "@type": "AutoRepair",
       name: "RapidAuto Mobile Mechanic",
-      telephone: "+1-540-525-8425",
+      telephone: "+1-540-254-0670",
       url: siteUrl,
     },
     areaServed: "United States",
     availableChannel: {
       "@type": "ServiceChannel",
       serviceUrl: siteUrl,
-      servicePhone: "+1-540-525-8425",
+      servicePhone: "+1-540-254-0670",
     },
   };
 

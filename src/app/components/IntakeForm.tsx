@@ -260,7 +260,7 @@ export function IntakeForm() {
               <div className="p-6 rounded-xl bg-card border border-border">
                 <Phone className="h-8 w-8 text-primary mx-auto mb-3" />
                 <h3 className="mb-2 text-sm text-foreground">Need Help?</h3>
-                <p className="text-sm text-muted-foreground">Call (540) 525-8425</p>
+                <p className="text-sm text-muted-foreground">Call (540)254-0670</p>
               </div>
             </div>
             <Button

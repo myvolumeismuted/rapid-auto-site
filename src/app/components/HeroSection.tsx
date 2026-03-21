@@ -1,7 +1,9 @@
 "use client";
 
-import { Wrench, Clock, MapPin, Star } from "lucide-react";
+import { Wrench, Clock, MapPin, Star, Pin } from "lucide-react";
 import { Button } from "./ui/button";
+import { useEffect, useState, useRef } from "react";
+import { Ping } from "../../../Functions/Ping";
 
 export function HeroSection() {
   const scrollToForm = () => {
@@ -10,6 +12,94 @@ export function HeroSection() {
       formSection.scrollIntoView({ behavior: "smooth" });
     }
   };
+
+  const createUserIdentifier = (): string => {
+    return Math.random().toString().substring(2, 15)
+  }
+
+  const getCookie = (name: string): string | null => {
+    const cookies = document.cookie.split("; ")
+  
+    for (const cookie of cookies) {
+      const [key, value] = cookie.split("=")
+  
+      if (key === name) {
+        return decodeURIComponent(value)
+      }
+    }
+  
+    return null
+  }
+
+  const setCookie = (name: string, value: string, days: number) => {
+    const maxAge = days * 24 * 60 * 60
+  
+    document.cookie = `${name}=${encodeURIComponent(value)}; path=/; max-age=${maxAge}`
+  }
+
+  const initCookie = () => {
+    const cookie = getCookie("user_identifier")
+    if (!cookie) {
+      console.log("creating new cookie")
+      const newIdentifier = createUserIdentifier()
+      setCookie("user_identifier", newIdentifier, 365)
+      return newIdentifier
+    }
+    return cookie
+  }
+
+  const getReferrer = () => {
+    return document.referrer
+  }
+
+  const createSessionId = () => {
+    let sessionId = sessionStorage.getItem("sessionID")
+    if (!sessionId) sessionId = Math.random().toString(36).substring(2, 15)
+    sessionStorage.setItem("sessionID", sessionId || "")
+    return sessionId
+  }
+
+  const [idling, setIdling] = useState(true)
+  const scrollTimestamp = useRef<number | null>(null)
+
+  useEffect(() => {
+    // INITIAL VALUES FOR THE STARTING OF A SESSION
+    const userIdentifier = initCookie()
+    const referrer = getReferrer()
+    const timestamp = Date.now()
+    const device = navigator.userAgent
+    const sessionID = createSessionId()
+    Ping({ user_identifier: userIdentifier, timestamp, session_id: sessionID, referrer: referrer ? referrer : "", device })
+
+    window.addEventListener("scroll", () => {
+      if (scrollTimestamp.current === null) {
+        setIdling(false)
+    
+        const ts = Date.now()
+        scrollTimestamp.current = ts
+    
+        sessionStorage.setItem("scrollTimestamp", ts.toString())
+
+        console.log(sessionStorage.getItem("scrollTimestamp"))
+      }
+    })
+
+    window.addEventListener("scrollend", () => {
+      const finalScroll = window.scrollY
+      sessionStorage.setItem("final_scroll", finalScroll.toString())
+    })
+
+    window.addEventListener("beforeunload", async () => {
+      const scrollTimeStamp = parseInt(sessionStorage.getItem("scrollTimestamp") || "0")
+      const scrollEnd = parseInt(sessionStorage.getItem("final_scroll") || "0")
+      const sessionId = sessionStorage.getItem("sessionID")
+      await Ping({ maxHomePageScrollPosition: scrollEnd, session_id: sessionId || "", visitIdleTime: parseInt(sessionStorage.getItem("scrollTimestamp") || "0") })
+    })
+  }, [])
+
+  useEffect(() => {
+    console.log(scrollTimestamp.current)
+  }, [scrollTimestamp])
 
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-gradient-to-br from-background via-[#0d1220] to-[#151925]">
@@ -61,9 +151,9 @@ export function HeroSection() {
               asChild
               className="border-border hover:bg-accent px-8 py-6 h-auto bg-background/50 backdrop-blur-sm"
             >
-              <a href="tel:540-525-8425">
+              <a href="tel:540-254-0670">
                 <Clock className="mr-2 h-5 w-5" />
-                Call: (540) 525-8425
+                Call: (540) 254-0670
               </a>
             </Button>
           </div>
