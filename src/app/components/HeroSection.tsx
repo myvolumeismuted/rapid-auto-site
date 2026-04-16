@@ -19,21 +19,21 @@ export function HeroSection() {
 
   const getCookie = (name: string): string | null => {
     const cookies = document.cookie.split("; ")
-  
+
     for (const cookie of cookies) {
       const [key, value] = cookie.split("=")
-  
+
       if (key === name) {
         return decodeURIComponent(value)
       }
     }
-  
+
     return null
   }
 
   const setCookie = (name: string, value: string, days: number) => {
     const maxAge = days * 24 * 60 * 60
-  
+
     document.cookie = `${name}=${encodeURIComponent(value)}; path=/; max-age=${maxAge}`
   }
 
@@ -59,7 +59,6 @@ export function HeroSection() {
     return sessionId
   }
 
-  const [idling, setIdling] = useState(true)
   const scrollTimestamp = useRef<number | null>(null)
 
   useEffect(() => {
@@ -69,37 +68,29 @@ export function HeroSection() {
     const timestamp = Date.now()
     const device = navigator.userAgent
     const sessionID = createSessionId()
-    Ping({ user_identifier: userIdentifier, timestamp, session_id: sessionID, referrer: referrer ? referrer : "", device })
+    const meta = { referrer: referrer, visit_timestamp: timestamp, device: device }
 
-    window.addEventListener("scroll", () => {
-      if (scrollTimestamp.current === null) {
-        setIdling(false)
-    
-        const ts = Date.now()
-        scrollTimestamp.current = ts
-    
-        sessionStorage.setItem("scrollTimestamp", ts.toString())
+    Ping({ user_identifier: userIdentifier, session_id: sessionID, event_name: "site_visit", metadata: meta })
 
-        console.log(sessionStorage.getItem("scrollTimestamp"))
-      }
-    })
-
+    // WINDOW SCROLL LISTENER
     window.addEventListener("scrollend", () => {
-      const finalScroll = window.scrollY
-      sessionStorage.setItem("final_scroll", finalScroll.toString())
+      const currentY = window.scrollY
+      localStorage.setItem("max_scroll", JSON.stringify(currentY))
     })
 
     window.addEventListener("beforeunload", async () => {
-      const scrollTimeStamp = parseInt(sessionStorage.getItem("scrollTimestamp") || "0")
-      const scrollEnd = parseInt(sessionStorage.getItem("final_scroll") || "0")
-      const sessionId = sessionStorage.getItem("sessionID")
-      await Ping({ maxHomePageScrollPosition: scrollEnd, session_id: sessionId || "", visitIdleTime: parseInt(sessionStorage.getItem("scrollTimestamp") || "0") })
+      await Ping({user_identifier: userIdentifier, session_id: createSessionId(), event_name: "max_scroll", metadata: {max_scroll_home: parseInt(localStorage.getItem("max_scroll") || "0"), window_height: window.innerHeight} })
     })
+
   }, [])
 
-  useEffect(() => {
-    console.log(scrollTimestamp.current)
-  }, [scrollTimestamp])
+
+
+
+
+
+
+
 
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-gradient-to-br from-background via-[#0d1220] to-[#151925]">

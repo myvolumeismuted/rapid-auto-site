@@ -1,15 +1,10 @@
 import { createClient } from "@supabase/supabase-js"
 
 export type PingOptions = {
-    user_identifier?: string,
-    timestamp?: number,
-    referrer?: string,
-    device?: string
-    converted?: boolean
-    returning?: string
-    maxHomePageScrollPosition?: number,
-    visitIdleTime?: number,
-    session_id: string
+    user_identifier: string,
+    session_id: string,
+    metadata?: { [key: string]: any },
+    event_name?: string
 }
 
 export async function Ping(options?: PingOptions) {
