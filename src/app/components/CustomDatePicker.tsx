@@ -2,21 +2,25 @@ import { useState, useEffect, useRef } from "react";
 
 
 export default function CustomDatePicker({updateDateFunc}: {updateDateFunc?: CallableFunction}) {
-    const today = new Date(new Date(Date.now()).setHours(0, 0, 0, 0,)).getTime()
-    const initialDaysArrayRef = useRef<number[]>(Array.from({ length: 14 }).map((i, index) => new Date(today + ((1000 * 60 * 60 * 24) * index)).getTime()))
-    const [selectedDate, setSelectedDate] = useState<number | null>(initialDaysArrayRef.current.find(item => item === today) || null)
-    const [days, setDays] = useState<number[]>(initialDaysArrayRef.current)
+    const updateDateFuncRef = useRef(updateDateFunc)
+    const [today] = useState(() => new Date(new Date().setHours(0, 0, 0, 0)).getTime())
+    const buildDaysArray = () => Array.from({ length: 14 }).map((i, index) => new Date(today + ((1000 * 60 * 60 * 24) * index)).getTime())
+    const [selectedDate, setSelectedDate] = useState<number | null>(today)
+    const [days, setDays] = useState<number[]>(() => buildDaysArray())
     const addNewWeek = () => {
-        const current = initialDaysArrayRef.current
-        if (current && current.length > 0) {
+        setDays((current) => {
+            if (!current || current.length < 1) return current
             const pinPoint = current[current.length - 1] + (1000 * 60 * 60 * 24)
             const next_seven_days = Array.from({ length: 7 }).map((i, index) => pinPoint + ((1000 * 60 * 60 * 24) * index))
-            initialDaysArrayRef.current = [...initialDaysArrayRef.current, ...next_seven_days]
-            setDays(initialDaysArrayRef.current)
-        }
+            return [...current, ...next_seven_days]
+        })
     }
 
     const [popoverDisplay, setPopoverDisplay] = useState<string>("none")
+
+    useEffect(() => {
+        updateDateFuncRef.current = updateDateFunc
+    }, [updateDateFunc])
 
 
     const toggleDisplay = () => {
@@ -28,8 +32,10 @@ export default function CustomDatePicker({updateDateFunc}: {updateDateFunc?: Cal
     }
 
     useEffect(() => {
-        updateDateFunc ? updateDateFunc(selectedDate) : null
-    }, [])
+        if (updateDateFuncRef.current && selectedDate) {
+            updateDateFuncRef.current(new Date(selectedDate))
+        }
+    }, [selectedDate])
 
     const formatDate = (date: number) => {
         const day = new Date(date)
@@ -40,12 +46,10 @@ export default function CustomDatePicker({updateDateFunc}: {updateDateFunc?: Cal
 
     const handleDaySelect = (date: number) => {
         setSelectedDate(date)
-        if (updateDateFunc && selectedDate) {
-            updateDateFunc(formatDate(selectedDate).dateObj)
-            // reset the date array
-            initialDaysArrayRef.current = Array.from({ length: 14 }).map((i, index) => new Date(today + ((1000 * 60 * 60 * 24) * index)).getTime())
-            setDays(initialDaysArrayRef.current)
-        }
+
+        // Reset the date array after selection in case the user scrolled ahead.
+        setDays(buildDaysArray())
+
         setTimeout(() => {
             setPopoverDisplay("none")
         }, 500);

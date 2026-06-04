@@ -16,10 +16,12 @@ export default function AppointmentTimePicker({ style, name, scrollable, trackVa
   const [loading, setLoading] = useState(true)
 
   function handleSelectedTimeChange(index: number, time: string) {
-    const prev = timeSheet
-    prev[index].selected = true
+    const nextTimeSheet = timeSheet.map((item, itemIndex) => ({
+      ...item,
+      selected: itemIndex === index,
+    }))
     setSelectedTime(time)
-    setTimeSheet(prev)
+    setTimeSheet(nextTimeSheet)
     console.log(selectedTime)
     setSelectorOpen(false)
     inputRef.current?.blur(); // closes focus
