@@ -32,9 +32,10 @@ async function sendNewVisitMail(timestamp?: number) {
     })
     if (timestamp) {
         const date = new Date(timestamp)
+        const hrs = date.getHours() > 12 ? `${date.getHours() - 12}:${date.getMinutes()} PM` : `${date.getHours()}:${date.getMinutes()} AM`
         await transporter.sendMail({
             subject: "New Website Visit",
-            text: timestamp ? `A new website visit was made on ${date.getMonth() + 1}/${date.getDay()}/${date.getFullYear()}, at ${date.getHours()}:${date.getMinutes()}` : "There's been a new website visit",
+            text: timestamp ? `A new website visit was made on ${date.getMonth() + 1}/${date.getDay()}/${date.getFullYear()}, at ${hrs}` : "There's been a new website visit",
             priority: "high",
             to: "kamerenrichardson1@gmail.com",
             from: "kam@rapidautoworks.com"
