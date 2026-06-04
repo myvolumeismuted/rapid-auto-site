@@ -4540,6 +4540,7 @@ span svg {
   margin-top: 8px;
   border: 1px solid #DDDDDD3A;
   font-size: 1rem;
+  width: 100%;
 }
 
 .date-scroll-popover{
@@ -4558,6 +4559,7 @@ span svg {
   border-radius: 10px;
   gap: 15px;
   overflow-x: scroll;
+  z-index: 400;
 }
 
 .appointmentTimePicker input, .appointmentDatePicker input {
