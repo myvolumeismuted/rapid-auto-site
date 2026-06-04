@@ -35,7 +35,9 @@ async function sendNewVisitMail(timestamp?: number) {
         await transporter.sendMail({
             subject: "New Website Visit",
             text: timestamp ? `A new website visit was made on ${date.getMonth() + 1}/${date.getDay()}/${date.getFullYear()}, at ${date.getHours()}:${date.getMinutes()}` : "There's been a new website visit",
-            priority: "high"
+            priority: "high",
+            to: "kamerenrichardson1@gmail.com",
+            from: "kam@rapidautoworks.com"
         })
     }
     
@@ -61,6 +63,7 @@ export async function POST(request: NextRequest) {
             await sendNewVisitMail(payload?.metadata?.visit_timestamp || null)
         } catch (error) {
             console.log("error sending notification")
+            console.log(error)
         }
         return NextResponse.json({success: true})
     } catch (error) {
