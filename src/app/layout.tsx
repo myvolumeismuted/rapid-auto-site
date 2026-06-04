@@ -8,9 +8,18 @@ const inter = Inter({ subsets: ["latin"] });
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://www.rapidautoworks.com";
 const businessName = "RapidAuto Mobile Mechanic";
-const defaultTitle = "Mobile Mechanic Near You | RapidAuto Mobile Mechanic";
+const serviceAreaNames = ["Roanoke", "Salem", "Vinton", "Blacksburg", "Christiansburg"];
+const serviceAreas = serviceAreaNames.map((name) => ({
+  "@type": "City",
+  name,
+  containedInPlace: {
+    "@type": "State",
+    name: "Virginia",
+  },
+}));
+const defaultTitle = "Mobile Mechanic in Roanoke, VA | RapidAuto Mobile Mechanic";
 const defaultDescription =
-  "RapidAuto Mobile Mechanic provides on-site car repair, diagnostics, brake service, oil changes, battery and starter replacement, and routine maintenance at your home, work, or roadside.";
+  "RapidAuto Mobile Mechanic provides on-site auto repair in Roanoke, Salem, Vinton, Blacksburg, and Christiansburg, VA, including diagnostics, brakes, oil changes, batteries, starters, and routine maintenance.";
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
@@ -31,6 +40,20 @@ export const metadata: Metadata = {
   },
   keywords: [
     "mobile mechanic",
+    "mobile mechanic Roanoke VA",
+    "mobile mechanic Salem VA",
+    "mobile mechanic Vinton VA",
+    "mobile mechanic Blacksburg VA",
+    "mobile mechanic Christiansburg VA",
+    "mobile auto repair Roanoke VA",
+    "mobile auto repair Salem VA",
+    "mobile auto repair Blacksburg VA",
+    "Roanoke mobile mechanic",
+    "Salem VA mobile mechanic",
+    "Blacksburg mobile mechanic",
+    "car repair at home Roanoke VA",
+    "car repair at home Salem VA",
+    "car repair at home Blacksburg VA",
     "mobile auto repair",
     "car repair at home",
     "car repair at work",
@@ -42,6 +65,7 @@ export const metadata: Metadata = {
     "starter replacement",
     "battery replacement",
     "RapidAuto",
+    "RapidAuto Works"
   ],
   referrer: "origin-when-cross-origin",
   alternates: {
@@ -119,7 +143,13 @@ export default function RootLayout({
         telephone: "+1-540-254-0670",
         email: "kam@rapidautoworks.com",
         priceRange: "$$",
-        areaServed: "United States",
+        address: {
+          "@type": "PostalAddress",
+          addressLocality: "Roanoke",
+          addressRegion: "VA",
+          addressCountry: "US",
+        },
+        areaServed: serviceAreas,
         serviceType: [
           "Mobile mechanic",
           "Oil change",

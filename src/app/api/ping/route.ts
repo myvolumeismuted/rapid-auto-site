@@ -1,6 +1,8 @@
 import { NextResponse, NextRequest } from "next/server";
 import { PingOptions } from "../../../../Functions/Ping";
 import { createClient } from "@supabase/supabase-js";
+import nodemailer from "nodemailer"
+import { metadata } from "@/app/layout";
 
 function getClientIp(req: NextRequest) {
     const forwarded = req.headers.get("x-forwarded-for");
@@ -16,6 +18,27 @@ async function gatherIPData(ip_address: string) {
     } else {
         return {}
     }
+}
+
+async function sendNewVisitMail(timestamp?: number) {
+    const transporter = nodemailer.createTransport({
+        host: "smtp.gmail.com",
+        port: 465,
+        secure: true,
+        auth: {
+            user: "kam@rapidautoworks.com",
+            pass: process.env.GOOGLE_APP_PASSWORD
+        }
+    })
+    if (timestamp) {
+        const date = new Date(timestamp)
+        await transporter.sendMail({
+            subject: "New Website Visit",
+            text: timestamp ? `A new website visit was made on ${date.getMonth() + 1}/${date.getDay()}/${date.getFullYear()}, at ${date.getHours()}:${date.getMinutes()}` : "There's been a new website visit",
+            priority: "high"
+        })
+    }
+    
 }
   
 export async function POST(request: NextRequest) {
@@ -34,6 +57,11 @@ export async function POST(request: NextRequest) {
         }
         const { data: InsertData, error: InsertError } = await supabase.from("tracking_data").insert([payload]).select().single()
         if (InsertError) return NextResponse.json({ success: false, message: "Error updating the database", err: InsertError })
+        try {
+            await sendNewVisitMail(payload?.metadata?.visit_timestamp || null)
+        } catch (error) {
+            console.log("error sending notification")
+        }
         return NextResponse.json({success: true})
     } catch (error) {
         return NextResponse.json({success: false, message: "Internal Server Error 505"})

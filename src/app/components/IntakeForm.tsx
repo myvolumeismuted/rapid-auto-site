@@ -13,6 +13,7 @@ import { format } from "date-fns";
 import { toast } from "sonner";
 import "react-day-picker/dist/style.css";
 import AppointmentTimePicker from "./AppointmentTimePicker";
+import CustomDatePicker from "./CustomDatePicker";
 
 interface FormData {
   // Customer Info
@@ -500,7 +501,7 @@ export function IntakeForm() {
                 <div className="grid md:grid-cols-2 gap-4">
                   <div>
                     <Label>Preferred Date</Label>
-                    <Popover>
+                    {/* <Popover>
                       <PopoverTrigger asChild>
                         <Button
                           type="button"
@@ -519,7 +520,8 @@ export function IntakeForm() {
                           initialFocus
                         />
                       </PopoverContent>
-                    </Popover>
+                    </Popover> */}
+                    <CustomDatePicker updateDateFunc={(val: Date) => setFormData({...formData, preferredDate: val}) }></CustomDatePicker>
                   </div>
 
                   <div>

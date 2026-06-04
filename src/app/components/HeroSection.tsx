@@ -1,8 +1,8 @@
 "use client";
 
-import { Wrench, Clock, MapPin, Star, Pin } from "lucide-react";
+import { Wrench, Clock, MapPin, Star } from "lucide-react";
 import { Button } from "./ui/button";
-import { useEffect, useState, useRef } from "react";
+import { useEffect } from "react";
 import { Ping } from "../../../Functions/Ping";
 
 export function HeroSection() {
@@ -58,8 +58,6 @@ export function HeroSection() {
     sessionStorage.setItem("sessionID", sessionId || "")
     return sessionId
   }
-
-  const scrollTimestamp = useRef<number | null>(null)
 
   useEffect(() => {
     // INITIAL VALUES FOR THE STARTING OF A SESSION
@@ -123,7 +121,7 @@ export function HeroSection() {
 
           {/* Subheading */}
           <p className="text-xl md:text-2xl text-muted-foreground mb-12 max-w-3xl mx-auto">
-            Skip the shop. Expert mobile mechanic service at your home, office, or anywhere in the city. Same-day appointments available.
+            Skip the shop. Expert mobile mechanic service at your home, office, or roadside in Roanoke, Salem, Vinton, Blacksburg, and Christiansburg, VA. Same-day appointments available.
           </p>
 
           {/* CTA Buttons */}

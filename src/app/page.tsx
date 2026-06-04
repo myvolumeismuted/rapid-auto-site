@@ -3,28 +3,36 @@ import { IntakeForm } from "./components/IntakeForm";
 import { Footer } from "./components/Footer";
 import { HeroSection } from "./components/HeroSection";
 import { ServicesSection } from "./components/ServicesSection";
-import Link from "next/link";
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://www.rapidautoworks.com";
+const serviceAreaNames = ["Roanoke", "Salem", "Vinton", "Blacksburg", "Christiansburg"];
+const serviceAreas = serviceAreaNames.map((name) => ({
+  "@type": "City",
+  name,
+  containedInPlace: {
+    "@type": "State",
+    name: "Virginia",
+  },
+}));
 
 export const metadata: Metadata = {
-  title: "Mobile Mechanic Service at Your Location",
+  title: "Mobile Mechanic Service in Roanoke, VA",
   description:
-    "Book on-site mobile mechanic service with transparent quote options for diagnostics, oil changes, brakes, battery, and more.",
+    "Book on-site mobile mechanic service in Roanoke, Salem, Vinton, Blacksburg, and Christiansburg, VA with transparent quotes for diagnostics, oil changes, brakes, batteries, and more.",
   alternates: {
     canonical: "/",
   },
   openGraph: {
-    title: "Mobile Mechanic Service at Your Location",
+    title: "Mobile Mechanic Service in Roanoke, VA",
     description:
-      "Book on-site mobile mechanic service with transparent quote options for diagnostics, oil changes, brakes, battery, and more.",
+      "Book on-site mobile mechanic service in Roanoke, Salem, Vinton, Blacksburg, and Christiansburg, VA with transparent quotes for diagnostics, oil changes, brakes, batteries, and more.",
     url: siteUrl,
     type: "website",
   },
   twitter: {
-    title: "Mobile Mechanic Service at Your Location",
+    title: "Mobile Mechanic Service in Roanoke, VA",
     description:
-      "Book on-site mobile mechanic service with transparent quote options for diagnostics, oil changes, brakes, battery, and more.",
+      "Book on-site mobile mechanic service in Roanoke, Salem, Vinton, Blacksburg, and Christiansburg, VA with transparent quotes for diagnostics, oil changes, brakes, batteries, and more.",
   },
 };
 
@@ -39,7 +47,7 @@ export default function Home() {
       telephone: "+1-540-254-0670",
       url: siteUrl,
     },
-    areaServed: "United States",
+    areaServed: serviceAreas,
     availableChannel: {
       "@type": "ServiceChannel",
       serviceUrl: siteUrl,
