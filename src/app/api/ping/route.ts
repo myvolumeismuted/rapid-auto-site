@@ -20,6 +20,25 @@ async function gatherIPData(ip_address: string) {
     }
 }
 
+async function sendNTFY() {
+    try {
+        // 1. Send the text notification to your unique ntfy topic
+        await fetch('https://ntfy.sh/rapid-auto-visits', {
+          method: 'POST',
+          body: '🚀 Someone just opened your web app!',
+          headers: {
+            'Title': 'New Website Visit',
+            'Priority': 'high', // Makes it bypass Android battery saving
+            'Tags': 'eyes,sparkles' // Adds fun emojis to the notification banner
+          }
+        });
+        return true
+      } catch (error) {
+        console.error('Notification failed:', error);
+        return false
+      }
+}
+
 async function sendNewVisitMail(timestamp?: number) {
     const formatter = new Intl.DateTimeFormat("en-US", {
         timeZone: "America/New_York",
@@ -78,6 +97,8 @@ export async function POST(request: NextRequest) {
             console.log("error sending notification")
             console.log(error)
         }
+        const success = await sendNTFY()
+        if (!success) console.log("Error sending NTFY")
         return NextResponse.json({success: true})
     } catch (error) {
         return NextResponse.json({success: false, message: "Internal Server Error 505"})
