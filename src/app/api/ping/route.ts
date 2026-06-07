@@ -25,11 +25,11 @@ async function sendNTFY() {
         // 1. Send the text notification to your unique ntfy topic
         await fetch('https://ntfy.sh/rapid-auto-visits', {
           method: 'POST',
-          body: '🚀 Someone just opened your web app!',
+          body: '🚀 Someone just visited your website!',
           headers: {
             'Title': 'New Website Visit',
             'Priority': 'high', // Makes it bypass Android battery saving
-            'Tags': 'eyes,sparkles' // Adds fun emojis to the notification banner
+            'Tags': 'chart_with_upwards_trend' // Adds fun emojis to the notification banner
           }
         });
         return true
